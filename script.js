@@ -60,10 +60,6 @@ class Cycling extends Workout {
   }
 }
 
-// const run1 = new Running([39, -10], 5.2, 24, 178);
-// const cycling1 = new Cycling([39, -15], 3.5, 55, 378);
-// console.log(run1, cycling1);
-
 ////////////////////////////////
 // APPLICATION ARCHITECTURE
 //Modal
@@ -290,7 +286,6 @@ class App {
       const [lat, lng] = currentWorkout.coords;
       let workout;
       const index = this.#workouts.indexOf(currentWorkout);
-      console.log(index);
       currentWorkout.type = type;
       currentWorkout.duration = duration;
       currentWorkout.distance = distance;
@@ -330,7 +325,6 @@ class App {
       this._renderWorkout(currentWorkout);
       this._renderWorkoutMarker(currentWorkout);
       this.#editMode = false;
-      console.log(this.#workouts);
     } else return;
   }
 
@@ -416,7 +410,6 @@ class App {
     currentWorkout = this.#workouts.find(
       work => work.id === workoutEl.dataset.id
     );
-    console.log(currentWorkout);
     ability.classList.remove('hidebuttons');
 
     this.#map.setView(currentWorkout.coords, this.#mapZoomLevel, {
@@ -425,30 +418,19 @@ class App {
         duration: 1,
       },
     });
-
-    //using the public interface
-    // JSON.stringify() methodu objectleri stringe çevirdiğinden objectlerin varolan property chainleri kesilir
-    //workout.click();
   }
 
   _setLocalStorage() {
-    // localStorage.setItem("key","objec") ilk parametre key, 2. parametre depelanmak istenen veriyi ifade eder
-    // yalnızca küçük boyuttaki dataları depolamak için kullanılır. aksi halde blocking yaşanır
-    // JSON.stringify() methodu objectleri stringe çevirir.
-    //NOT:*** objectlerin varolan property chainleri kesilir***
     localStorage.setItem('workouts', JSON.stringify(this.#workouts));
   }
 
   _getLocalStroge() {
-    //localStorage.getItem('key') belirtilen keydeki veriyi getirir
-    // JSON.parse(localStorage.getItem('key')); belirtilen key deki veriyi objecte çevirir
     const data = JSON.parse(localStorage.getItem('workouts'));
 
     //localstrogeda data olmadığında;
     if (!data) return;
 
     this.#workouts = data;
-    // sayfa yenilendiğinde varolan workout form verilerini tutar
     this.#workouts.forEach(work => {
       this._renderWorkout(work);
     });
@@ -468,11 +450,9 @@ class App {
   // Edit-mode
   _editMode() {
     this.#editMode = true;
-    console.log(this.#editMode);
     curWorkEl = [...containerWorkouts.children].find(
       curWork => currentWorkout.id === curWork.dataset.id
     );
-    console.log(curWorkEl);
     curWorkEl.style.backgroundColor = 'goldenrod';
     this._showForm();
   }
@@ -499,15 +479,9 @@ class App {
         marker._latlng.lat === currentWorkout.coords[0] &&
         marker._latlng.lng === currentWorkout.coords[1]
     );
-    console.log(markerLatLng);
     const indexmarker = this.#markers.indexOf(markerLatLng);
-    console.log(indexmarker);
-    console.log(this.#markers);
-    console.log(this.#markers[indexmarker]);
     this.#map.removeLayer(this.#markers[indexmarker]);
     this.#markers.splice(indexmarker, 1);
-    console.log(this.#markers);
-
     localStorage.setItem('workouts', JSON.stringify(this.#workouts));
   }
 
@@ -541,7 +515,6 @@ class App {
     overlay.addEventListener('click', closeModal);
 
     document.addEventListener('keydown', function (e) {
-      // console.log(e.key);
       if (e.key === 'Escape' && !modal.classList.contains('hidde-modal'))
         closeModal();
     });
